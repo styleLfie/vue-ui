@@ -1,35 +1,74 @@
-.el-row {
-    &::before,
-    &::after {
-      display: block;
-      content: "";
+// 如果代码非常多， 可以按照bem 进行模块封装
+
+
+$namespace:"el";
+$selector:'&';
+$modifier-name:"flex";
+$modifier-undeline:"___";
+$modifier-middleline:"--";
+$selector-modifier:#{$selector} + #{$modifier-middleline} + #{$modifier-name};
+@mixin block($block) {
+  $par:#{$namespace}+'-'+#{$block};
+  @at-root{
+   .#{$par}{
+      @content;
+   }
+  }
+}
+
+@mixin utils-clearfix{
+    @at-root{
+      #{$selector}::before,
+      #{$selector}::after {
+        display: block;
+        content: "";
+      }
+      #{$selector}::after {
+        clear: both;
+      }
     }
-    &::after {
-      clear: both;
+}
+
+@mixin  m {
+  $m:'is-';
+  // $sel:#{$selector}+'.'+#{$m};
+  @at-root{
+    #{$selector}.#{$m}justify-end {
+      justify-content: flex-end;
     }
-    &--flex {
-      display: flex;
-      &::after,
-      &::before {
-        display: none;
-      }
-      &.is-justify-end {
-        justify-content: flex-end;
-      }
-      &.is-justify-space-around {
-        justify-content: space-around;
-      }
-      &.is-justify-space-between {
-        justify-content: space-around;
-      }
-      &.is-justify-center {
-        justify-content: center;
-      }
-      &.is-align-middle {
-        align-items: center;
-      }
-      &.is-align-bottom {
-        align-items: flex-end;
-      }
+    #{$selector}.#{$m}justify-space-around {
+      justify-content: space-around;
+    }
+    #{$selector}.#{$m}justify-space-between {
+      justify-content: space-around;
+    }
+    #{$selector}.#{$m}justify-center {
+      justify-content: center;
+    }
+    #{$selector}.#{$m}align-middle {
+      align-items: center;
+    }
+    #{$selector}.#{$m}align-bottom {
+      align-items: flex-end;
     }
   }
+}
+// @include 里面的内容会被放到 @content
+@include block(row){
+  @include utils-clearfix;
+  #{$selector-modifier} {
+    display: flex;
+    &::after,
+    &::before {
+      display: none;
+    }
+   @include m;
+  }
+}
+
+
+// 遍历多个值
+// @each $var in $list{
+  
+// }
+
